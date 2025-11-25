@@ -13,7 +13,7 @@ import {
 
 const menuItems = [
   {
-    title: "Connect DB",
+    title: "File Upload",
     url: "/",
     icon: Upload,
     description: "Upload files for scanning",
