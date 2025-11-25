@@ -36,20 +36,20 @@ export function AppSidebar() {
   const [location] = useLocation();
 
   return (
-    <Sidebar className="border-r-0">
-      <SidebarContent className="gap-0 pt-8">
+    <Sidebar className="border-r-0 sidebar-gradient">
+      <SidebarContent className="gap-0 pt-10">
         <SidebarGroup>
-          <SidebarGroupLabel className="px-4 text-sidebar-foreground/70 text-xs uppercase tracking-wider font-semibold mb-2">
+          <SidebarGroupLabel className="px-5 text-sidebar-foreground/80 text-xs uppercase tracking-widest font-bold mb-4 letter-spacing-wide">
             Data Input Options
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu className="gap-1 px-3">
+            <SidebarMenu className="gap-2 px-3">
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton 
                     asChild 
                     isActive={location === item.url}
-                    className="sidebar-hover-effect px-4 py-3 font-medium hover:bg-sidebar-accent rounded-md"
+                    className="sidebar-hover-effect px-4 py-3.5 font-semibold hover:bg-sidebar-accent/50 rounded-lg transition-all"
                     data-active={location === item.url}
                   >
                     <Link href={item.url} data-testid={`link-sidebar-${item.title.toLowerCase().replace(' ', '-')}`}>

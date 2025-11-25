@@ -35,11 +35,11 @@ export default function Step2() {
   const getCategoryBadge = (category: string) => {
     switch (category) {
       case "Direct PII":
-        return <Badge variant="destructive" className="text-xs">Direct PII</Badge>;
+        return <Badge className="text-xs pii-badge-direct rounded-full px-3 py-1">Direct PII</Badge>;
       case "Indirect PII":
-        return <Badge className="text-xs bg-primary">Indirect PII</Badge>;
+        return <Badge className="text-xs pii-badge-indirect rounded-full px-3 py-1">Indirect PII</Badge>;
       default:
-        return <Badge variant="secondary" className="text-xs">Non-PII</Badge>;
+        return <Badge className="text-xs pii-badge-non rounded-full px-3 py-1">Non-PII</Badge>;
     }
   };
 
@@ -48,17 +48,17 @@ export default function Step2() {
   const uniquePIITypes = Array.from(new Set(piiColumns.map((col) => col.piiType).filter((type) => type !== "None")));
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-8 page-transition">
-      <div className="space-y-6">
-        <div>
-          <h2 className="text-3xl font-bold text-foreground mb-2">PII Detection Results</h2>
-          <p className="text-muted-foreground">
+    <div className="max-w-6xl mx-auto px-8 py-10 page-transition">
+      <div className="space-y-8">
+        <div className="space-y-3">
+          <h2 className="text-4xl font-bold text-foreground tracking-tight">PII Detection Results</h2>
+          <p className="text-base text-muted-foreground">
             Review detected sensitive information and select appropriate sanitization actions.
           </p>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          <Card className="shadow-md" data-testid="card-total-columns">
+          <Card className="enterprise-shadow card-hover-lift rounded-xl" data-testid="card-total-columns">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Total Columns Scanned
@@ -71,7 +71,7 @@ export default function Step2() {
             </CardContent>
           </Card>
 
-          <Card className="shadow-md" data-testid="card-pii-columns">
+          <Card className="enterprise-shadow card-hover-lift rounded-xl" data-testid="card-pii-columns">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 PII Columns Found
@@ -84,7 +84,7 @@ export default function Step2() {
             </CardContent>
           </Card>
 
-          <Card className="shadow-md" data-testid="card-pii-types">
+          <Card className="enterprise-shadow card-hover-lift rounded-xl" data-testid="card-pii-types">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 PII Types Detected
@@ -98,25 +98,25 @@ export default function Step2() {
           </Card>
         </div>
 
-        <Card className="shadow-md" data-testid="card-results-table">
+        <Card className="enterprise-shadow card-accent-bar rounded-xl" data-testid="card-results-table">
           <CardHeader>
-            <CardTitle className="text-lg">Column Analysis</CardTitle>
+            <CardTitle className="text-xl font-bold">Column Analysis</CardTitle>
           </CardHeader>
           <CardContent className="px-0 sm:px-6">
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
               <table className="w-full min-w-[600px]">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-foreground">
+                <thead className="table-sticky-header">
+                  <tr className="border-b-2 border-border">
+                    <th className="text-left py-4 px-4 text-sm font-bold text-foreground bg-card">
                       Column Name
                     </th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-foreground">
+                    <th className="text-left py-4 px-4 text-sm font-bold text-foreground bg-card">
                       PII Type Detected
                     </th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-foreground">
+                    <th className="text-left py-4 px-4 text-sm font-bold text-foreground bg-card">
                       Category
                     </th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-foreground">
+                    <th className="text-left py-4 px-4 text-sm font-bold text-foreground bg-card">
                       Action
                     </th>
                   </tr>
@@ -125,8 +125,8 @@ export default function Step2() {
                   {piiColumns.map((column, index) => (
                     <tr
                       key={column.columnName}
-                      className={`border-b border-border ${
-                        index % 2 === 0 ? "bg-background" : "bg-card"
+                      className={`border-b border-border table-row-hover ${
+                        index % 2 === 0 ? "bg-background" : "bg-muted/30"
                       }`}
                       data-testid={`row-column-${column.columnName}`}
                     >

@@ -27,10 +27,10 @@ export default function TextPaste() {
           </p>
         </div>
 
-        <Card className="enterprise-shadow card-fade-in border-card-border" data-testid="card-text-paste">
+        <Card className="enterprise-shadow card-fade-in card-hover-lift card-accent-bar border-card-border rounded-xl" data-testid="card-text-paste">
           <CardHeader className="pb-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shadow-sm">
                 <FileText className="w-6 h-6 text-primary" />
               </div>
               <div>
@@ -56,7 +56,7 @@ export default function TextPaste() {
           </CardContent>
         </Card>
 
-        <Card className="enterprise-shadow card-fade-in border-card-border" style={{ animationDelay: '0.1s' }} data-testid="card-options">
+        <Card className="enterprise-shadow card-fade-in card-hover-lift card-accent-bar border-card-border rounded-xl" style={{ animationDelay: '0.1s' }} data-testid="card-options">
           <CardHeader className="pb-4">
             <CardTitle className="text-xl font-bold">Detection Options</CardTitle>
             <CardDescription className="text-sm mt-1">Configure how PII detection should be performed</CardDescription>
