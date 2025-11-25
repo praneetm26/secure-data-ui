@@ -35,31 +35,31 @@ export default function Step1() {
   const displayFile = uploadedFile || dataInput.fileMetadata;
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8 page-transition">
-      <div className="space-y-6">
-        <div>
-          <h2 className="text-3xl font-bold text-foreground mb-2">Data Input</h2>
-          <p className="text-muted-foreground">
+    <div className="max-w-5xl mx-auto px-8 py-10 page-transition">
+      <div className="space-y-8">
+        <div className="space-y-3">
+          <h2 className="text-4xl font-bold text-foreground tracking-tight">Data Input</h2>
+          <p className="text-base text-muted-foreground">
             Upload your CSV or XLSX file to begin scanning for sensitive information.
           </p>
         </div>
 
-        <Card className="shadow-md" data-testid="card-file-upload">
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-md bg-primary/10 flex items-center justify-center">
-                <Upload className="w-5 h-5 text-primary" />
+        <Card className="enterprise-shadow card-fade-in border-card-border" data-testid="card-file-upload">
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <Upload className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <CardTitle className="text-lg">File Upload</CardTitle>
-                <CardDescription>CSV or XLSX files</CardDescription>
+                <CardTitle className="text-xl font-bold">File Upload</CardTitle>
+                <CardDescription className="text-sm mt-1">CSV or XLSX files</CardDescription>
               </div>
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
+          <CardContent className="pt-2">
+            <div className="space-y-5">
               <div>
-                <Label htmlFor="file-upload" className="text-sm font-medium">
+                <Label htmlFor="file-upload" className="text-sm font-semibold mb-2 block">
                   Select File
                 </Label>
                 <Input
@@ -67,16 +67,16 @@ export default function Step1() {
                   type="file"
                   accept=".csv,.xlsx"
                   onChange={handleFileUpload}
-                  className="mt-2"
+                  className="h-11"
                   data-testid="input-file-upload"
                 />
               </div>
               {displayFile && (
-                <div className="p-3 bg-muted rounded-md">
-                  <p className="text-sm font-medium text-foreground truncate" data-testid="text-uploaded-filename">
+                <div className="p-4 bg-accent/50 rounded-lg border border-border">
+                  <p className="text-sm font-semibold text-foreground truncate" data-testid="text-uploaded-filename">
                     {uploadedFile?.name || dataInput.fileMetadata?.name}
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="text-xs text-muted-foreground mt-1.5">
                     {((uploadedFile?.size || dataInput.fileMetadata?.size || 0) / 1024).toFixed(2)} KB
                   </p>
                 </div>
@@ -85,41 +85,43 @@ export default function Step1() {
           </CardContent>
         </Card>
 
-        <Card className="shadow-md" data-testid="card-options">
-          <CardHeader>
-            <CardTitle className="text-lg">Detection Options</CardTitle>
-            <CardDescription>Configure how PII detection should be performed</CardDescription>
+        <Card className="enterprise-shadow card-fade-in border-card-border" style={{ animationDelay: '0.1s' }} data-testid="card-options">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-xl font-bold">Detection Options</CardTitle>
+            <CardDescription className="text-sm mt-1">Configure how PII detection should be performed</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
+          <CardContent className="pt-2">
+            <div className="space-y-5">
+              <div className="flex items-start gap-4 p-4 rounded-lg hover:bg-accent/30 transition-colors">
                 <Checkbox
                   id="auto-detect"
                   checked={dataInput.autoDetectSchema ?? true}
                   onCheckedChange={(checked) => updateDataInput({ autoDetectSchema: checked as boolean })}
                   data-testid="checkbox-auto-detect"
+                  className="mt-1"
                 />
-                <div>
-                  <Label htmlFor="auto-detect" className="text-sm font-medium cursor-pointer">
+                <div className="flex-1">
+                  <Label htmlFor="auto-detect" className="text-sm font-semibold cursor-pointer">
                     Auto-detect schema
                   </Label>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground mt-1">
                     Automatically identify data types and structure
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-start gap-4 p-4 rounded-lg hover:bg-accent/30 transition-colors">
                 <Checkbox
                   id="ml-detection"
                   checked={dataInput.enableMLDetection ?? true}
                   onCheckedChange={(checked) => updateDataInput({ enableMLDetection: checked as boolean })}
                   data-testid="checkbox-ml-detection"
+                  className="mt-1"
                 />
-                <div>
-                  <Label htmlFor="ml-detection" className="text-sm font-medium cursor-pointer">
+                <div className="flex-1">
+                  <Label htmlFor="ml-detection" className="text-sm font-semibold cursor-pointer">
                     Enable ML-based PII detection
                   </Label>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground mt-1">
                     Use machine learning models for enhanced PII detection accuracy
                   </p>
                 </div>
@@ -128,10 +130,10 @@ export default function Step1() {
           </CardContent>
         </Card>
 
-        <div className="flex justify-center pt-4">
+        <div className="flex justify-center pt-6">
           <Button
             size="lg"
-            className="px-12"
+            className="px-16 py-6 text-base font-semibold button-lift"
             onClick={handleRunScan}
             disabled={!hasInput}
             data-testid="button-run-scan"

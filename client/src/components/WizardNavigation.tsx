@@ -12,29 +12,29 @@ const steps = [
 
 export default function WizardNavigation({ currentStep }: WizardNavigationProps) {
   return (
-    <div className="w-full max-w-3xl mx-auto py-8 px-4" data-testid="wizard-navigation">
+    <div className="w-full max-w-4xl mx-auto py-10 px-6" data-testid="wizard-navigation">
       <div className="flex items-center justify-between relative">
         {steps.map((step, index) => (
           <div key={step.number} className="flex items-center flex-1 relative z-10">
             <div className="flex flex-col items-center w-full">
               <div
-                className={`w-12 h-12 rounded-full flex items-center justify-center font-semibold text-sm transition-all ${
+                className={`w-14 h-14 rounded-full flex items-center justify-center font-bold text-base transition-all duration-300 ${
                   currentStep > step.number
-                    ? "bg-primary text-primary-foreground"
+                    ? "bg-primary text-primary-foreground shadow-md"
                     : currentStep === step.number
-                    ? "bg-primary text-primary-foreground ring-4 ring-primary/20"
+                    ? "bg-primary text-primary-foreground ring-4 ring-primary/20 shadow-lg scale-110"
                     : "bg-muted text-muted-foreground"
                 }`}
                 data-testid={`wizard-step-${step.number}`}
               >
                 {currentStep > step.number ? (
-                  <Check className="w-6 h-6" />
+                  <Check className="w-7 h-7" />
                 ) : (
                   <span>{step.number}</span>
                 )}
               </div>
               <span
-                className={`mt-2 text-xs sm:text-sm font-medium text-center ${
+                className={`mt-3 text-xs sm:text-sm font-semibold text-center transition-colors ${
                   currentStep >= step.number ? "text-foreground" : "text-muted-foreground"
                 }`}
               >
@@ -43,7 +43,7 @@ export default function WizardNavigation({ currentStep }: WizardNavigationProps)
             </div>
             {index < steps.length - 1 && (
               <div
-                className={`flex-1 h-1 mx-4 rounded-full transition-all ${
+                className={`flex-1 h-1.5 mx-4 rounded-full transition-all duration-300 ${
                   currentStep > step.number ? "bg-primary" : "bg-muted"
                 }`}
               />
