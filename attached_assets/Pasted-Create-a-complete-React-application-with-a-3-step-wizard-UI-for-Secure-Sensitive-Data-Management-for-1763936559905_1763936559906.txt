@@ -1,0 +1,191 @@
+Create a complete React application with a 3-step wizard UI for Secure Sensitive Data Management for GenAI, using only PwC theme (colors, fonts, styling, patterns).
+
+The application is UI-only (no backend). All data interactions must use mock JSON.
+
+PwC Theme Requirements
+
+Use the official PwC color palette:
+
+PwC Orange: #FF5F05 (Primary)
+
+PwC Red: #D9391C
+
+PwC Warm Grey: #D4CFC9
+
+PwC Dark Grey: #2D2D2D
+
+PwC Light Grey: #F0F0F0
+
+White: #FFFFFF
+
+Font requirements:
+
+Primary font: Helvetica Neue
+
+Fallback fonts: Arial, Sans-serif
+
+Styling guidelines:
+
+Corporate, clean, structured layouts
+
+Sharp-edged cards with soft shadows
+
+PwC orange for buttons with white text
+
+Minimalistic rounded input fields
+
+A multi-step wizard progress bar styled with PwC colors
+
+Consistent spacing, padding, margins, and card layout
+
+Header with left-aligned placeholder PwC logo
+
+Use modular CSS or styled-components
+
+Application Requirements
+
+Create a three-step wizard-based UI:
+
+STEP 1 — Data Input Page
+
+Include:
+
+File Upload (CSV/XLSX)
+
+Text Paste box (multiline)
+
+Database fields (mock):
+
+DB Name
+
+Table Name
+
+Query box
+
+Additional Options:
+
+Auto-detect schema (checkbox)
+
+Enable ML-based PII detection (checkbox)
+
+Primary Action Button:
+
+RUN SCAN
+
+Layout:
+
+Cards with PwC theme
+
+Clean grid alignment
+
+Inputs should be PwC-style minimalistic
+
+STEP 2 — PII Detection Results Page
+
+Show:
+
+Total columns scanned
+
+Summary of PII types found
+
+Table displaying:
+
+Column name
+
+PII Type Detected (email, phone, etc.)
+
+Category (Direct PII, Indirect PII, Non-PII)
+
+Dropdown of actions:
+
+Mask
+
+Tokenize
+
+Hash
+
+Remove
+
+Keep
+
+Navigation:
+
+BACK (secondary button)
+
+NEXT → PREVIEW (primary PwC orange button)
+
+UI Style:
+
+PwC orange headers
+
+Structured table with alternating row colors
+
+Action dropdown styled to theme
+
+STEP 3 — Sanitization Preview Page
+
+Show a Before vs After comparison:
+
+Original values
+
+Sanitized values
+
+Highlight masked areas (greyed out / asterisks)
+
+Buttons:
+
+BACK
+
+DOWNLOAD CLEAN FILE
+
+SUBMIT TO GENAI TOOL (mock; no backend needed)
+
+Design:
+
+Card-like layout with PwC colors
+
+Distinct columns with clean table borders
+
+Soft animations for table transitions (optional but preferred)
+
+Technical Requirements
+
+Use React (functional components)
+
+Use React Router or local state for step navigation
+
+Use CSS Modules or styled-components
+
+Use dummy/mock JSON files for:
+
+Scanned results
+
+Sanitized output preview
+
+Folder structure:
+
+/src
+  /components
+  /pages
+  /theme
+  /data
+  App.js
+  index.js
+
+Deliverables to generate automatically
+
+All component files
+
+Pages for Step 1, Step 2, Step 3
+
+PwC Theme file (colors, fonts, spacing, shadows)
+
+Reusable Button component
+
+Reusable Card component
+
+Mock data JSON files
+
+Wizard navigation bar
+
+Fully styled UI matching PwC brand standards
