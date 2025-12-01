@@ -114,32 +114,50 @@ The application strictly adheres to PwC brand guidelines with custom Tailwind co
 
 ## Recent Changes
 
+### December 1, 2025 - UI Simplification and Folder Upload
+- **Sidebar Updates**:
+  - Changed "File Upload" to "Folder Upload" with FolderOpen icon
+  - Removed "Text Paste" option completely
+  - Only two options remain: Folder Upload and Database Connection
+- **Step 1 (Data Input) Changes**:
+  - Changed from single file upload to folder upload supporting multiple file types (DOC, DOCX, XLSX, CSV, TXT)
+  - Removed Detection Options card (auto-detect schema and ML detection checkboxes)
+  - Added display of uploaded file count and total size
+  - Fixed state persistence when navigating between pages
+- **Step 2 (PII Detection) Changes**:
+  - Removed Action column from analysis table
+  - Table now shows only 3 columns: Column Name, PII Type, PII Category
+  - Replaced "Next: Preview" button with "Submit" button
+  - Added confirmation modal on Submit: "Are you sure you want to mask these values?" with Yes/No options
+- **Step 3 (Sanitization Preview) Changes**:
+  - Removed "Total Columns" and "Protection Rate" cards
+  - Only "Sanitized Columns" card remains
+  - Removed "Column Name" from Before vs After comparison table
+  - Table now shows only Original Value and Sanitized Value
+- **Cleanup**:
+  - Removed TextPaste.tsx page and route
+  - App.tsx cleaned up to remove TextPaste import
+
 ### November 25, 2025 - Centralized State Management Refactoring
 - **Logo Integration**: Replaced "PwC" text with official pwc_logo.jpeg in Header component
 - **Sidebar Navigation**: Implemented collapsible left sidebar using shadcn/ui Sidebar component
-  - Contains "Data Input Options" menu with Text Paste and Database Connection links
+  - Contains "Data Input Options" menu with Folder Upload and Database Connection links
   - Uses SidebarProvider at app root with proper width configuration
   - Hamburger toggle integrated in Header for collapse/expand functionality
-- **Page Refactoring**: Separated input methods into dedicated routes
-  - Step1 (/) now displays only File Upload option
-  - TextPaste (/text-paste) added for text-based data input
-  - DatabaseConnection (/database-connection) added for database query input
 - **State Management Architecture**: Complete refactoring to eliminate local state
-  - All input fields (fileMetadata, pastedText, dbName, tableName, query) controlled by WizardContext
+  - All input fields (fileMetadata, dbName, tableName, query) controlled by WizardContext
   - Introduced updateDataInput helper for partial state updates with proper merging
-  - Shared settings (autoDetectSchema, enableMLDetection) synchronized across all pages
   - Navigation between routes preserves all data without loss
-  - Architect-verified as production-ready implementation
 
 ### Application Routes
-- `/` - Step 1: File Upload data input
-- `/text-paste` - Text Paste data input (sidebar access)
+- `/` - Step 1: Folder Upload data input
 - `/database-connection` - Database Connection input (sidebar access)
 - `/step2` - Step 2: PII Detection Results
 - `/step3` - Step 3: Sanitization Preview
 
 ### Key Implementation Details
-- All input pages call updateDataInput on every onChange event for immediate persistence
+- Folder upload supports multi-file selection with DOC, DOCX, XLSX, CSV, TXT extensions
 - Context-driven rendering ensures data consistency across navigation
 - Mock data services provide realistic PII detection results for demonstration
 - PwC branding maintained consistently throughout all pages and components
+- Confirmation modal uses shadcn AlertDialog component for consistent styling
