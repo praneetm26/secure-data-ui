@@ -1,25 +1,25 @@
+import { useState } from "react";
 import { useLocation } from "wouter";
-import { ArrowLeft, ArrowRight, ShieldCheck, AlertTriangle, Info } from "lucide-react";
+import { ArrowLeft, ShieldCheck, AlertTriangle, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useWizard } from "@/context/WizardContext";
-import type { ActionOption } from "@shared/schema";
 
 export default function Step2() {
   const [, setLocation] = useLocation();
-  const { piiColumns, updateColumnAction } = useWizard();
-
-  const handleActionChange = (columnName: string, action: ActionOption) => {
-    updateColumnAction(columnName, action);
-  };
+  const { piiColumns } = useWizard();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -46,6 +46,19 @@ export default function Step2() {
   const totalColumns = piiColumns.length;
   const piiCount = piiColumns.filter((col) => col.category !== "Non-PII").length;
   const uniquePIITypes = Array.from(new Set(piiColumns.map((col) => col.piiType).filter((type) => type !== "None")));
+
+  const handleSubmit = () => {
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmYes = () => {
+    setShowConfirmModal(false);
+    setLocation("/step3");
+  };
+
+  const handleConfirmNo = () => {
+    setShowConfirmModal(false);
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-8 py-10 page-transition">
@@ -104,20 +117,17 @@ export default function Step2() {
           </CardHeader>
           <CardContent className="px-0 sm:px-6">
             <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
-              <table className="w-full min-w-[600px]">
+              <table className="w-full min-w-[500px]">
                 <thead className="table-sticky-header">
                   <tr className="border-b-2 border-border">
                     <th className="text-left py-4 px-4 text-sm font-bold text-foreground bg-card">
                       Column Name
                     </th>
                     <th className="text-left py-4 px-4 text-sm font-bold text-foreground bg-card">
-                      PII Type Detected
+                      PII Type
                     </th>
                     <th className="text-left py-4 px-4 text-sm font-bold text-foreground bg-card">
-                      Category
-                    </th>
-                    <th className="text-left py-4 px-4 text-sm font-bold text-foreground bg-card">
-                      Action
+                      PII Category
                     </th>
                   </tr>
                 </thead>
@@ -142,28 +152,6 @@ export default function Step2() {
                           {getCategoryBadge(column.category)}
                         </div>
                       </td>
-                      <td className="py-3 px-4">
-                        <Select
-                          value={column.action}
-                          onValueChange={(value) =>
-                            handleActionChange(column.columnName, value as ActionOption)
-                          }
-                        >
-                          <SelectTrigger
-                            className="w-36"
-                            data-testid={`select-action-${column.columnName}`}
-                          >
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="mask">Mask</SelectItem>
-                            <SelectItem value="tokenize">Tokenize</SelectItem>
-                            <SelectItem value="hash">Hash</SelectItem>
-                            <SelectItem value="remove">Remove</SelectItem>
-                            <SelectItem value="keep">Keep</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -184,14 +172,32 @@ export default function Step2() {
           </Button>
           <Button
             size="lg"
-            onClick={() => setLocation("/step3")}
-            data-testid="button-next"
+            onClick={handleSubmit}
+            data-testid="button-submit"
           >
-            NEXT: PREVIEW
-            <ArrowRight className="w-4 h-4 ml-2" />
+            SUBMIT
           </Button>
         </div>
       </div>
+
+      <AlertDialog open={showConfirmModal} onOpenChange={setShowConfirmModal}>
+        <AlertDialogContent data-testid="dialog-confirm-mask">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Masking</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to mask these values?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleConfirmNo} data-testid="button-confirm-no">
+              No
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmYes} data-testid="button-confirm-yes">
+              Yes
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

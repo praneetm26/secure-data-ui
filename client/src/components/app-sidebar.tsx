@@ -1,4 +1,4 @@
-import { FileText, Database, Upload } from "lucide-react";
+import { FolderOpen, Database } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import {
   Sidebar,
@@ -13,16 +13,10 @@ import {
 
 const menuItems = [
   {
-    title: "File Upload",
+    title: "Folder Upload",
     url: "/",
-    icon: Upload,
-    description: "Upload files for scanning",
-  },
-  {
-    title: "Text Paste",
-    url: "/text-paste",
-    icon: FileText,
-    description: "Paste your raw data",
+    icon: FolderOpen,
+    description: "Upload folder for scanning",
   },
   {
     title: "Database Connection",

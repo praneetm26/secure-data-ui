@@ -1,27 +1,37 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { Upload } from "lucide-react";
+import { FolderOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useWizard } from "@/context/WizardContext";
+
+interface UploadedFile {
+  name: string;
+  size: number;
+  type: string;
+}
 
 export default function Step1() {
   const [, setLocation] = useLocation();
   const { dataInput, updateDataInput } = useWizard();
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setUploadedFile(file);
+  const handleFolderUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const fileList: UploadedFile[] = Array.from(files).map(file => ({
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      }));
+      setUploadedFiles(fileList);
       updateDataInput({
         fileMetadata: {
-          name: file.name,
-          size: file.size,
-          type: file.type,
+          name: `${files.length} file(s) selected`,
+          size: Array.from(files).reduce((acc, file) => acc + file.size, 0),
+          type: "folder",
         },
       });
     }
@@ -31,8 +41,14 @@ export default function Step1() {
     setLocation("/step2");
   };
 
-  const hasInput = uploadedFile || dataInput.fileMetadata;
-  const displayFile = uploadedFile || dataInput.fileMetadata;
+  const hasInput = uploadedFiles.length > 0 || dataInput.fileMetadata;
+  const hasLocalFiles = uploadedFiles.length > 0;
+  const totalSize = hasLocalFiles 
+    ? uploadedFiles.reduce((acc, file) => acc + file.size, 0)
+    : (dataInput.fileMetadata?.size || 0);
+  const displayName = hasLocalFiles 
+    ? `${uploadedFiles.length} file(s) selected`
+    : dataInput.fileMetadata?.name;
 
   return (
     <div className="max-w-5xl mx-auto px-8 py-10 page-transition">
@@ -40,92 +56,62 @@ export default function Step1() {
         <div className="space-y-3">
           <h2 className="text-4xl font-bold text-foreground tracking-tight">Data Input</h2>
           <p className="text-base text-muted-foreground">
-            Upload your CSV or XLSX file to begin scanning for sensitive information.
+            Upload your folder containing files to begin scanning for sensitive information.
           </p>
         </div>
 
-        <Card className="enterprise-shadow card-fade-in card-hover-lift card-accent-bar border-card-border rounded-xl" data-testid="card-file-upload">
+        <Card className="enterprise-shadow card-fade-in card-hover-lift card-accent-bar border-card-border rounded-xl" data-testid="card-folder-upload">
           <CardHeader className="pb-4">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shadow-sm">
-                <Upload className="w-6 h-6 text-primary" />
+                <FolderOpen className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <CardTitle className="text-xl font-bold">File Upload</CardTitle>
-                <CardDescription className="text-sm mt-1">CSV or XLSX files</CardDescription>
+                <CardTitle className="text-xl font-bold">Folder Upload</CardTitle>
+                <CardDescription className="text-sm mt-1">DOC, DOCX, XLSX, CSV, TXT files</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent className="pt-2">
             <div className="space-y-5">
               <div>
-                <Label htmlFor="file-upload" className="text-sm font-semibold mb-2 block">
-                  Select File
+                <Label htmlFor="folder-upload" className="text-sm font-semibold mb-2 block">
+                  Select Folder
                 </Label>
                 <Input
-                  id="file-upload"
+                  id="folder-upload"
                   type="file"
-                  accept=".csv,.xlsx"
-                  onChange={handleFileUpload}
+                  accept=".doc,.docx,.xlsx,.csv,.txt"
+                  onChange={handleFolderUpload}
                   className="h-11"
-                  data-testid="input-file-upload"
+                  data-testid="input-folder-upload"
+                  {...({ webkitdirectory: "", directory: "", multiple: true } as React.InputHTMLAttributes<HTMLInputElement>)}
                 />
               </div>
-              {displayFile && (
+              {hasInput && (
                 <div className="p-4 bg-accent/50 rounded-lg border border-border">
-                  <p className="text-sm font-semibold text-foreground truncate" data-testid="text-uploaded-filename">
-                    {uploadedFile?.name || dataInput.fileMetadata?.name}
+                  <p className="text-sm font-semibold text-foreground" data-testid="text-uploaded-folder">
+                    {displayName}
                   </p>
                   <p className="text-xs text-muted-foreground mt-1.5">
-                    {((uploadedFile?.size || dataInput.fileMetadata?.size || 0) / 1024).toFixed(2)} KB
+                    Total size: {(totalSize / 1024).toFixed(2)} KB
                   </p>
+                  {hasLocalFiles && (
+                    <div className="mt-3 max-h-32 overflow-y-auto space-y-1">
+                      {uploadedFiles.slice(0, 10).map((file, index) => (
+                        <p key={index} className="text-xs text-muted-foreground truncate">
+                          {file.name}
+                        </p>
+                      ))}
+                      {uploadedFiles.length > 10 && (
+                        <p className="text-xs text-muted-foreground">
+                          ...and {uploadedFiles.length - 10} more file(s)
+                        </p>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="enterprise-shadow card-fade-in card-hover-lift card-accent-bar border-card-border rounded-xl" style={{ animationDelay: '0.1s' }} data-testid="card-options">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-xl font-bold">Detection Options</CardTitle>
-            <CardDescription className="text-sm mt-1">Configure how PII detection should be performed</CardDescription>
-          </CardHeader>
-          <CardContent className="pt-2">
-            <div className="space-y-5">
-              <div className="flex items-start gap-4 p-4 rounded-lg hover:bg-accent/30 transition-colors">
-                <Checkbox
-                  id="auto-detect"
-                  checked={dataInput.autoDetectSchema ?? true}
-                  onCheckedChange={(checked) => updateDataInput({ autoDetectSchema: checked as boolean })}
-                  data-testid="checkbox-auto-detect"
-                  className="mt-1"
-                />
-                <div className="flex-1">
-                  <Label htmlFor="auto-detect" className="text-sm font-semibold cursor-pointer">
-                    Auto-detect schema
-                  </Label>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Automatically identify data types and structure
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4 p-4 rounded-lg hover:bg-accent/30 transition-colors">
-                <Checkbox
-                  id="ml-detection"
-                  checked={dataInput.enableMLDetection ?? true}
-                  onCheckedChange={(checked) => updateDataInput({ enableMLDetection: checked as boolean })}
-                  data-testid="checkbox-ml-detection"
-                  className="mt-1"
-                />
-                <div className="flex-1">
-                  <Label htmlFor="ml-detection" className="text-sm font-semibold cursor-pointer">
-                    Enable ML-based PII detection
-                  </Label>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Use machine learning models for enhanced PII detection accuracy
-                  </p>
-                </div>
-              </div>
             </div>
           </CardContent>
         </Card>

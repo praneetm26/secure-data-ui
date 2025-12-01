@@ -27,7 +27,6 @@ export default function Step3() {
   };
 
   const sanitizedCount = sanitizedData.filter((row) => row.masked).length;
-  const totalRows = sanitizedData.length;
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-8 page-transition">
@@ -39,20 +38,7 @@ export default function Step3() {
           </p>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          <Card className="shadow-md" data-testid="card-total-rows">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Total Columns
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-foreground" data-testid="text-total-rows">
-                {totalRows}
-              </div>
-            </CardContent>
-          </Card>
-
+        <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 max-w-sm">
           <Card className="shadow-md" data-testid="card-sanitized-columns">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -62,19 +48,6 @@ export default function Step3() {
             <CardContent>
               <div className="text-3xl font-bold text-primary" data-testid="text-sanitized-columns">
                 {sanitizedCount}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-md" data-testid="card-protection-rate">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Protection Rate
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-foreground" data-testid="text-protection-rate">
-                {Math.round((sanitizedCount / totalRows) * 100)}%
               </div>
             </CardContent>
           </Card>
@@ -89,12 +62,9 @@ export default function Step3() {
           </CardHeader>
           <CardContent className="px-0 sm:px-6">
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[700px]">
+              <table className="w-full min-w-[400px]">
                 <thead>
                   <tr className="border-b border-border">
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-foreground">
-                      Column Name
-                    </th>
                     <th className="text-left py-3 px-4 text-sm font-semibold text-foreground">
                       Original Value
                     </th>
@@ -112,9 +82,6 @@ export default function Step3() {
                       }`}
                       data-testid={`row-preview-${row.columnName}`}
                     >
-                      <td className="py-3 px-4">
-                        <code className="text-sm font-mono text-foreground">{row.columnName}</code>
-                      </td>
                       <td className="py-3 px-4">
                         <span className="text-sm text-foreground">{row.original}</span>
                       </td>
